@@ -1,12 +1,10 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "es2021": true,
         "allow": ["_id"]
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
         "airbnb-base"
     ],
     "parserOptions": {
@@ -23,4 +21,4 @@ module.exports = {
       "semi": ["error", "always"],
       "quotes": ["error", "double"]
     }
-};
+}

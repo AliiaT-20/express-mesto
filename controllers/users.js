@@ -25,7 +25,7 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
   .then(user => res.send({data: user}))
   .catch((err) => {
-    if (err = 'ValidatorError') {
+    if (err.name === 'ValidationError') {
       return res.status(400).send({ message: "Переданы неккоректные данные пользователя" })
     } else {
       return res.status(500).send({ message: "Произошла ошибка" });
@@ -37,7 +37,7 @@ module.exports.updateUser = (req, res) => {
   User.findByIdAndUpdate(req.user._id, {name: req.params.name, about: req.params.about})
   .then(user => res.send({data: user}))
   .catch((err) => {
-    if (err = 'ValidatorError') {
+    if (err.name = 'ValidationError') {
       return res.status(400).send({ message: "Переданы неккоректные данные пользователя" })
     } else {
       return res.status(500).send({ message: "Произошла ошибка" });
@@ -49,7 +49,7 @@ module.exports.updateAvatar = (req, res) => {
   User.findByIdAndUpdate(req.user._id, { avatar: req.params.avatar })
   .then(user => res.send({data: user}))
   .catch((err) => {
-    if (err = 'ValidatorError') {
+    if (err.name === 'ValidationError') {
       return res.status(400).send({ message: "Переданы неккоректные данные пользователя" })
     } else {
       return res.status(500).send({ message: "Произошла ошибка" });
