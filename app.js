@@ -15,15 +15,15 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
   useUnifiedTopology: true
 });
-
-app.use('/', require('./routes/users'));
-app.use('/', require('./routes/cards'));
 app.use((req, res, next) => {
   req.user = {
     _id: "60ac016f7ae695247ece94b9"
   };
   next();
 });
+app.use('/', require('./routes/users'));
+app.use('/', require('./routes/cards'));
+
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает

@@ -2,13 +2,14 @@ const Card = require('../models/card');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
+  .populate('user')
   .then(cards => res.send({data: cards}))
   .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
 }
 
 module.exports.createCard = (req, res) => {
-  const { name, link } = req.body;
-  Card.create({ name, link })
+  const { name, link, userId } = req.body;
+  Card.create({ name, link, owner: userId })
   .then(card => res.send({data: card}))
   .catch((err) => {
     if (err.name === 'ValidationError') {
@@ -20,14 +21,15 @@ module.exports.createCard = (req, res) => {
 }
 
 module.exports.deleteCardById = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId, (err, card) => {
-    if (err.message && ~err.message.indexOf('Cast to ObjectId failed')) {
-      res.status(404).send({ message: "Карточка с указанным _id не найдена" })
-    }
-    res.json(card)
-  })
+  Card.findByIdAndRemove(req.params.cardId)
   .then(card => res.send({data: card}))
-  .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      return res.status(404).send({ message: "Карточка с указанным _id не найдена." })
+    } else {
+      res.status(500).send({ message: "Произошла ошибка" })
+    }
+  });
 }
 
 module.exports.likeCard = (req, res) => {
