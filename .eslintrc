@@ -2,9 +2,11 @@
     "env": {
         "browser": true,
         "es2021": true,
-        "allow": ["_id"]
     },
     "extends": [
         "airbnb-base"
-    ]
+    ],
+    "rules": {
+      "allow": ["_id"]
+    }
 }
