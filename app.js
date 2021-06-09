@@ -41,21 +41,23 @@ app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
 
-app.use(errors())
+app.use(errors());
 
 app.use((err, req, res, next) => {
   if (!err.statusCode) {
     const { statusCode = 500, message } = err;
-    res
-      .status(statusCode)
-      .send({
-        message: statusCode === 500
-          ? 'На сервере произошла ошибка'
-          : message
-    });
+    return res
+            .status(statusCode)
+            .send({
+              message: statusCode === 500
+                ? 'На сервере произошла ошибка'
+                : message
+            });
   }
-  res.status(err.statusCode).send({ message: err.message })
-})
+  return res.status(err.statusCode).send({ message: err.message })
+});
+
+app.use('/', require('./routes/pageNotFound'));
 
 
 app.listen(PORT, () => {

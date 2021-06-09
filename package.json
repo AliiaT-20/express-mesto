@@ -1,8 +1,8 @@
 {
   "name": "express-mesto",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend проекта Mesto",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/AliiaT-20/express-mesto.git"
   },
-  "author": "",
+  "author": "Aliia Troitskaya",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AliiaT-20/express-mesto/issues"

@@ -14,11 +14,19 @@ module.exports.getUsers = (req, res, next) => {
 }
 
 module.exports.getUser = (req, res, next) => {
+  if (req.params.userId.length < 24) {
+    throw new ValidationError('Неправильный формат userId')
+  }
   User.findById(req.params.userId)
-  .then(user => res.send({data: user}))
+  .then((user) => {
+    if (user === null) {
+      throw new CastError('Пользователь с указанным _id не найден')
+    }
+    res.send({data: user})
+  })
   .catch((err) => {
       if (err.name === 'CastError') {
-        const error = new CastError('Пользователь с указанным _id не найдена');
+        const error = new CastError('Пользователь с указанным _id не найден');
         next(error);
       } else {
         next(err);
@@ -34,7 +42,7 @@ module.exports.createUser = (req, res, next) => {
       User.create({
         name: name,
         about: about,
-        avatr: avatar,
+        avatar: avatar,
         email: email,
         password: hash })
     )
@@ -44,6 +52,7 @@ module.exports.createUser = (req, res, next) => {
         const error = new MongoError('Пользователь с таким e-mail уже существует');
         next(error);
       } else if (err.name === 'ValidationError') {
+        console.log(err)
         const error = new ValidationError("Переданны некорректные данные пользователя")
         next(error);
       } else {
