@@ -1,10 +1,10 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const { celebrate, Joi } = require('celebrate');
-const { errors } = require('celebrate');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -12,12 +12,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 app.post('/signup', celebrate({
@@ -27,41 +26,35 @@ app.post('/signup', celebrate({
     avatar: Joi.string(),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  })
-}),createUser);
+  }),
+}), createUser);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
-  })
+  }),
 }), login);
 
 app.use(auth);
 
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/cards'));
+app.use('/', require('./routes/pageNotFound'));
 
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  if (!err.statusCode) {
-    const { statusCode = 500, message } = err;
-    return res
-            .status(statusCode)
-            .send({
-              message: statusCode === 500
-                ? 'На сервере произошла ошибка'
-                : message
-            });
-  }
-  return res.status(err.statusCode).send({ message: err.message })
+  const { statusCode = 500, message } = err;
+  return res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
 });
-
-app.use('/', require('./routes/pageNotFound'));
-
 
 app.listen(PORT, () => {
   // Если всё работает, консоль покажет, какой порт приложение слушает
-  console.log(`App listening on port ${PORT}`)
-})
-
+  console.log(`App listening on port ${PORT}`);
+});

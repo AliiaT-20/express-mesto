@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
-const isEmail = require("validator/lib/isEmail");
-const bcrypt = require("bcryptjs");
+const mongoose = require('mongoose');
+
+const isEmail = require('validator/lib/isEmail');
+const bcrypt = require('bcryptjs');
+
 const userSchema = new mongoose.Schema({
   name: { // у пользователя есть имя — опишем требования к имени в схеме:
     type: String,
@@ -20,9 +22,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function (v) {
-        return /^((http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/.test(v)
+        return /^((http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/.test(v);
       },
-      message: "Неправильный формат ссылки",
+      message: 'Неправильный формат ссылки',
     },
   },
   email: {
@@ -55,7 +57,6 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           return user;
         });
     });
-}
+};
 
-
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);
